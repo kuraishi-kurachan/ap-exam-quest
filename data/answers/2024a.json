@@ -1,0 +1,407 @@
+{
+  "id": "2024a",
+  "label": "令和6年度 秋期",
+  "answers": {
+    "1": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "2": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "3": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "4": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "T"
+    },
+    "5": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "6": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "7": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "8": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "9": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "10": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "11": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "12": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "13": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "14": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "15": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "T"
+    },
+    "16": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "17": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "T"
+    },
+    "18": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "19": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "20": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "21": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "22": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "23": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "24": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "25": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "26": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "27": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "28": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "29": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "30": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "31": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "32": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "33": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "34": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "35": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "36": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "T"
+    },
+    "37": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "38": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "39": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "T"
+    },
+    "40": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "41": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "42": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "43": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "44": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "45": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "46": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "T"
+    },
+    "47": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "T"
+    },
+    "48": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "49": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "T"
+    },
+    "50": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "T"
+    },
+    "51": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "M"
+    },
+    "52": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "M"
+    },
+    "53": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "M"
+    },
+    "54": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "M"
+    },
+    "55": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "M"
+    },
+    "56": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "M"
+    },
+    "57": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "M"
+    },
+    "58": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "M"
+    },
+    "59": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "M"
+    },
+    "60": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "M"
+    },
+    "61": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "62": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "S"
+    },
+    "63": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "64": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "65": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    },
+    "66": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "S"
+    },
+    "67": {
+      "answer": 3,
+      "raw": "エ",
+      "field": "S"
+    },
+    "68": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    },
+    "69": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    },
+    "70": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    },
+    "71": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    },
+    "72": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "S"
+    },
+    "73": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "74": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    },
+    "75": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "76": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "77": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "S"
+    },
+    "78": {
+      "answer": 1,
+      "raw": "イ",
+      "field": "S"
+    },
+    "79": {
+      "answer": 0,
+      "raw": "ア",
+      "field": "S"
+    },
+    "80": {
+      "answer": 2,
+      "raw": "ウ",
+      "field": "S"
+    }
+  },
+  "problems": []
+}
