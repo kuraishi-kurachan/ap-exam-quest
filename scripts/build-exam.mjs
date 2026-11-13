@@ -6,6 +6,8 @@ import { join } from 'node:path';
 import { ROOT, SRC_DIR, OUT_DIR, ANSWERS_DIR, minorToMajor, readJson, writeJson } from './lib.mjs';
 
 const pad2 = (n) => String(n).padStart(2, '0');
+// 用語名の表記ゆれをそろえる対応表
+const aliases = readJson(join(ROOT, 'data', 'term-aliases.json'), {});
 
 for (const id of process.argv.slice(2)) {
   const answers = readJson(join(ANSWERS_DIR, `${id}.json`));
@@ -60,7 +62,7 @@ for (const id of process.argv.slice(2)) {
       explanation: t.explanation,
       whyWrong: t.whyWrong,
       analogy: t.analogy,
-      terms: t.terms ?? [],
+      terms: (t.terms ?? []).map((term) => ({ ...term, name: aliases[term.name] ?? term.name })),
     });
   }
 
