@@ -94,9 +94,7 @@ function QuestionView({ ctx, q }: { ctx: Ctx; q: Question }) {
         <span className="rounded-full bg-slate-200 px-2 py-0.5 dark:bg-slate-800">{q.minor}</span>
         {stat && <span className="rounded-full bg-amber-100 px-2 py-0.5 text-amber-900 dark:bg-amber-900 dark:text-amber-100">復習(過去{stat.wrong}回ミス)</span>}
       </div>
-      <Card>
-        <RichText text={q.stem} />
-      </Card>
+      <Stem q={q} />
       <div className="mt-4 space-y-2">
         {q.choices.map((c, i) => (
           <button
@@ -106,7 +104,7 @@ function QuestionView({ ctx, q }: { ctx: Ctx; q: Question }) {
             className="flex min-h-14 w-full items-start gap-3 rounded-xl border border-slate-300 bg-white p-3 text-left active:bg-teal-50 dark:border-slate-700 dark:bg-slate-900 dark:active:bg-slate-800"
           >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-700 font-bold text-white dark:bg-teal-600">{KANA[i]}</span>
-            <RichText text={c} className="pt-0.5" />
+            {showsImageChoice(q, c) ? <span className="pt-1 text-sm text-slate-500 dark:text-slate-400">画像の{KANA[i]}</span> : <RichText text={c} className="pt-0.5" />}
           </button>
         ))}
       </div>
@@ -160,7 +158,7 @@ function Explanation({ ctx, q }: { ctx: Ctx; q: Question }) {
             >
               <summary className="flex cursor-pointer list-none items-start gap-2">
                 <span className="font-bold">{KANA[i]}</span>
-                <RichText text={c} className="flex-1 text-sm" />
+                {showsImageChoice(q, c) ? <span className="flex-1 text-sm">(問題の画像の{KANA[i]}を参照)</span> : <RichText text={c} className="flex-1 text-sm" />}
                 <span aria-hidden>{isAns ? '⭕' : isMine ? '❌' : ''}</span>
               </summary>
               <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">{q.whyWrong[i]}</p>
@@ -200,9 +198,9 @@ function Explanation({ ctx, q }: { ctx: Ctx; q: Question }) {
         {showStem ? '問題文を閉じる' : '問題文をもう一度見る'}
       </button>
       {showStem && (
-        <Card className="mt-2 text-sm">
-          <RichText text={q.stem} />
-        </Card>
+        <div className="mt-2 text-sm">
+          <Stem q={q} />
+        </div>
       )}
 
       <div className="mt-4 space-y-1 text-xs text-slate-500 dark:text-slate-400">
@@ -291,5 +289,35 @@ function Result({ ctx }: { ctx: Ctx }) {
         <Button onClick={() => ctx.update(closeSession)}>ホームへ</Button>
       </BottomBar>
     </>
+  );
+}
+
+/**
+ * 選択肢を文字ではなく「画像の〇」と表示するか。
+ * 画像のある問題で、選択肢が図だけ(「（図は原文参照）」)か表のときは、画像に写っているのでそちらを見てもらう
+ * (表をボタンの中に描くと縦長に崩れるため)。
+ */
+function showsImageChoice(q: Question, text: string): boolean {
+  if (text.trim() === '（図は原文参照）') return true;
+  return !!q.figure && text.includes('|');
+}
+
+/** 問題文。図表問題は問題冊子から切り出した画像を表示する(タップで拡大) */
+function Stem({ q }: { q: Question }) {
+  if (q.figure) {
+    const src = import.meta.env.BASE_URL + q.figure;
+    return (
+      <Card className="p-2">
+        <a href={src} target="_blank" rel="noreferrer">
+          <img src={src} alt={q.stem} className="w-full rounded-lg bg-white" loading="lazy" />
+        </a>
+        <p className="mt-1 px-2 text-xs text-slate-500 dark:text-slate-400">問題冊子から切り出した画像です。タップで拡大できます。</p>
+      </Card>
+    );
+  }
+  return (
+    <Card>
+      <RichText text={q.stem} />
+    </Card>
   );
 }

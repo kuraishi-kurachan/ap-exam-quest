@@ -18,9 +18,14 @@ export function shuffle<T>(items: T[], rng: Rng): T[] {
   return a;
 }
 
-/** 出題対象: 図表が必要な問題(未対応)と「おかしい」報告済みの問題を除く */
+/** 図表が必要なのに画像がまだない問題か */
+export function figureMissing(q: Question): boolean {
+  return q.hasFigure && !q.figure;
+}
+
+/** 出題対象: 画像のない図表問題と「おかしい」報告済みの問題を除く */
 export function eligiblePool(questions: Question[], progress: Progress): Question[] {
-  return questions.filter((q) => !q.hasFigure && !progress.questions[q.id]?.flagged);
+  return questions.filter((q) => !figureMissing(q) && !progress.questions[q.id]?.flagged);
 }
 
 /** 復習期限が来ている問題。期限が古い順、同じなら段階が低い順 */

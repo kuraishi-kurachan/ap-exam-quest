@@ -16,6 +16,7 @@ export type Question = {
   major: string; // 大分類(部門)
   minor: string; // 中分類
   hasFigure: boolean;
+  figure?: string; // 図表問題の切り出し画像(public/ からの相対パス)
   modified: boolean; // 表記を一部改変したか
   stem: string;
   choices: [string, string, string, string];

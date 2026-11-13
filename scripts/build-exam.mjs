@@ -1,11 +1,13 @@
 // 書き写し結果(data-src/transcribed/{回ID}/part-*.json)と、解答PDFから取った正解を結合して
 // アプリが読む問題データ src/data/exams/{回ID}.json を作る。
 // 使い方: node scripts/build-exam.mjs 2025a
-import { readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { SRC_DIR, OUT_DIR, ANSWERS_DIR, minorToMajor, readJson, writeJson } from './lib.mjs';
+import { ROOT, SRC_DIR, OUT_DIR, ANSWERS_DIR, minorToMajor, readJson, writeJson } from './lib.mjs';
 
 const pad2 = (n) => String(n).padStart(2, '0');
+// 用語名の表記ゆれをそろえる対応表
+const aliases = readJson(join(ROOT, 'data', 'term-aliases.json'), {});
 
 for (const id of process.argv.slice(2)) {
   const answers = readJson(join(ANSWERS_DIR, `${id}.json`));
@@ -49,6 +51,10 @@ for (const id of process.argv.slice(2)) {
       major: major ? major.name : null,
       minor: t.minor,
       hasFigure: Boolean(t.hasFigure),
+      // 図表問題の切り出し画像(scripts/crop_figures.py で作成済みなら付ける)
+      ...(t.hasFigure && existsSync(join(ROOT, 'public', 'figures', `${id}-${pad2(t.no)}.png`))
+        ? { figure: `figures/${id}-${pad2(t.no)}.png` }
+        : {}),
       modified: Boolean(t.modified),
       stem: t.stem,
       choices: t.choices,
@@ -56,7 +62,7 @@ for (const id of process.argv.slice(2)) {
       explanation: t.explanation,
       whyWrong: t.whyWrong,
       analogy: t.analogy,
-      terms: t.terms ?? [],
+      terms: (t.terms ?? []).map((term) => ({ ...term, name: aliases[term.name] ?? term.name })),
     });
   }
 
@@ -66,7 +72,8 @@ for (const id of process.argv.slice(2)) {
 
   writeJson(join(OUT_DIR, 'exams', `${id}.json`), { id, label: answers.label, questions });
 
-  const figures = questions.filter((q) => q.hasFigure).map((q) => q.no);
+  const figures = questions.filter((q) => q.hasFigure).map((q) => `${q.no}${q.figure ? '' : '(画像なし)'}`);
   console.log(`${id}: ${questions.length}問を出力(図表あり: ${figures.join(', ') || 'なし'})`);
+  if (figures.some((f) => f.includes('画像なし'))) console.log(`  → python3 scripts/crop_figures.py ${id} で図表の画像を切り出してください`);
   for (const w of warnings) console.log(`  要確認: ${w}`);
 }
