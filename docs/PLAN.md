@@ -19,7 +19,7 @@
 | 科目A | 2027/2/6〜2/19 |
 | 科目B | 2027/3/3〜3/15 |
 
-日程は検索結果ベースで、IPA公式ページでの最終確認はまだ。フェーズ0で確認すること(確認先: https://www.ipa.go.jp/shiken/mousikomi/schedule.html )。
+日程はIPA公式「スケジュール、手数料など」(2026/11/9更新)で確認済み: https://www.ipa.go.jp/shiken/mousikomi/schedule.html
 
 ### ここから決まる方針
 - **MVPは11月中に使い始められる状態にする。** 作り込みより「毎日使えること」を優先。
@@ -92,7 +92,7 @@
 
 ## 4. データ形式
 
-### 問題(1回分を1ファイル、`public/data/2025a.json` のように置く)
+### 問題(1回分を1ファイル、`src/data/exams/2025a.json` のように置く。ビルド時にアプリへ取り込まれ、PWAが端末に保存する)
 
 ```ts
 type Question = {
@@ -115,7 +115,7 @@ type Question = {
 ```
 
 大分類(部門マップの9部門):基礎理論/コンピュータシステム/技術要素/開発技術/プロジェクトマネジメント/サービスマネジメント/システム戦略/経営戦略/企業と法務。
-中分類の正式な一覧は、IPAのシラバスで確認してから固定する。
+中分類はIPAのシラバスVer7.2で確認済み(9大分類・23中分類)。一覧は `src/data/syllabus.json`。
 
 ### AI生成文の書き方
 - `explanation`:3〜5文。前提知識がITパスポート程度の人が読んで分かる言葉で。
@@ -215,7 +215,8 @@ type Progress = {
 docs/PLAN.md          この文書
 scripts/              PDF取得、解答抽出、検査
 data-src/             ダウンロードしたPDFとページ画像(git管理しない)
-public/data/          問題JSON、イベント状況文JSON
+src/data/exams/       問題JSON(回ごと)
+src/data/             シラバス(syllabus.json)、イベント状況文(scenarios.ts)
 src/logic/            間隔反復、出題選択、成長計算(テスト付き)
 src/screens/          各画面
 src/storage/          学習記録の読み書き
