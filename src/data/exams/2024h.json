@@ -2028,7 +2028,7 @@
           "definition": "Earned Value Management（アーンドバリューマネジメント）の略で、作業の出来高を金額に換算し、計画値や実コストと比べて、コストと進捗を同時に管理する手法です。"
         },
         {
-          "name": "CPI",
+          "name": "EVMのCPI",
           "definition": "Cost Performance Index（コスト効率指数）の略で、EV÷ACで求めます。1未満なら、出来高に対して計画以上のコストが掛かっていることを表します。"
         },
         {
