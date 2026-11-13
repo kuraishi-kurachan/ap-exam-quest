@@ -104,7 +104,7 @@ function QuestionView({ ctx, q }: { ctx: Ctx; q: Question }) {
             className="flex min-h-14 w-full items-start gap-3 rounded-xl border border-slate-300 bg-white p-3 text-left active:bg-teal-50 dark:border-slate-700 dark:bg-slate-900 dark:active:bg-slate-800"
           >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-700 font-bold text-white dark:bg-teal-600">{KANA[i]}</span>
-            {isPlaceholder(c) ? <span className="pt-1 text-sm text-slate-500 dark:text-slate-400">図の{KANA[i]}</span> : <RichText text={c} className="pt-0.5" />}
+            {showsImageChoice(q, c) ? <span className="pt-1 text-sm text-slate-500 dark:text-slate-400">画像の{KANA[i]}</span> : <RichText text={c} className="pt-0.5" />}
           </button>
         ))}
       </div>
@@ -158,7 +158,7 @@ function Explanation({ ctx, q }: { ctx: Ctx; q: Question }) {
             >
               <summary className="flex cursor-pointer list-none items-start gap-2">
                 <span className="font-bold">{KANA[i]}</span>
-                {isPlaceholder(c) ? <span className="flex-1 text-sm">(図は問題の画像を参照)</span> : <RichText text={c} className="flex-1 text-sm" />}
+                {showsImageChoice(q, c) ? <span className="flex-1 text-sm">(問題の画像の{KANA[i]}を参照)</span> : <RichText text={c} className="flex-1 text-sm" />}
                 <span aria-hidden>{isAns ? '⭕' : isMine ? '❌' : ''}</span>
               </summary>
               <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">{q.whyWrong[i]}</p>
@@ -292,9 +292,14 @@ function Result({ ctx }: { ctx: Ctx }) {
   );
 }
 
-/** 選択肢が図だけの問題の、文字の代わりの印 */
-function isPlaceholder(text: string): boolean {
-  return text.trim() === '（図は原文参照）';
+/**
+ * 選択肢を文字ではなく「画像の〇」と表示するか。
+ * 画像のある問題で、選択肢が図だけ(「（図は原文参照）」)か表のときは、画像に写っているのでそちらを見てもらう
+ * (表をボタンの中に描くと縦長に崩れるため)。
+ */
+function showsImageChoice(q: Question, text: string): boolean {
+  if (text.trim() === '（図は原文参照）') return true;
+  return !!q.figure && text.includes('|');
 }
 
 /** 問題文。図表問題は問題冊子から切り出した画像を表示する(タップで拡大) */
