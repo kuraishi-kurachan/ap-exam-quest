@@ -40,6 +40,11 @@ for (const f of files) {
       if (major.name !== q.major) err(q, `大分類と中分類が合わない(${q.major} / ${q.minor})`);
       if (major.field !== q.field) err(q, `分野(${q.field})と中分類(${q.minor})が合わない`);
     }
+    // 解説と正解の食い違いチェック: 正解の選択肢の理由だけが「正しい」で始まるはず
+    if (Array.isArray(q.whyWrong) && q.whyWrong.length === 4) {
+      const marked = q.whyWrong.map((w, i) => (/^正しい/.test(w) ? i : -1)).filter((i) => i >= 0);
+      if (marked.length !== 1 || marked[0] !== q.answer) err(q, `whyWrong の「正しい」が正解(${KANA[q.answer]})と一致しない`);
+    }
     if (/^問\s*\d+/.test(q.stem)) err(q, '問題文の先頭に問番号が入っている');
     if (q.choices?.some((c) => /^[アイウエ][\s　]/.test(c))) err(q, '選択肢の先頭に記号が入っている');
 
