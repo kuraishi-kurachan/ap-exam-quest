@@ -5,7 +5,7 @@ import { daysBetween } from '../logic/date';
 import { formatValuation, masteryRatio, stageFor } from '../logic/growth';
 import { copyText } from '../lib/clipboard';
 import { closeSession } from '../logic/play';
-import { auditStatus, dueList } from '../logic/select';
+import { auditStatus, dueList, figureMissing } from '../logic/select';
 import { exportProgress, needsBackup } from '../storage/progress';
 
 export default function Home({ ctx }: { ctx: Ctx }) {
@@ -16,7 +16,7 @@ export default function Home({ ctx }: { ctx: Ctx }) {
   const audit = auditStatus(due);
   const todayLog = progress.history.find((h) => h.date === today);
   const daysToA = daysBetween(today, EXAM_DATES.examAStart);
-  const figureCount = all.filter((q) => q.hasFigure).length;
+  const figureCount = all.filter(figureMissing).length;
   const unseen = pool.filter((q) => !progress.questions[q.id]).length;
 
   const session = progress.session;

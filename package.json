@@ -13,6 +13,7 @@
     "data:answers": "node scripts/extract-answers.mjs",
     "data:pages": "node scripts/render-pages.mjs",
     "data:build": "node scripts/build-exam.mjs",
+    "data:figures": "python3 scripts/crop_figures.py",
     "data:validate": "node scripts/validate.mjs"
   },
   "dependencies": {

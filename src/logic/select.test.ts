@@ -11,10 +11,15 @@ function withStats(stats: Progress['questions']): Progress {
 }
 
 describe('出題対象', () => {
-  it('図表が必要な問題と「おかしい」報告済みの問題は出さない', () => {
-    const qs = [fakeQuestion('a'), fakeQuestion('b', undefined, undefined, { hasFigure: true }), fakeQuestion('c')];
+  it('画像のない図表問題と「おかしい」報告済みの問題は出さない', () => {
+    const qs = [
+      fakeQuestion('a'),
+      fakeQuestion('b', undefined, undefined, { hasFigure: true }),
+      fakeQuestion('c'),
+      fakeQuestion('d', undefined, undefined, { hasFigure: true, figure: 'figures/d.png' }),
+    ];
     const p = withStats({ c: { box: 1, due: today, seen: 1, wrong: 1, flagged: true } });
-    expect(eligiblePool(qs, p).map((q) => q.id)).toEqual(['a']);
+    expect(eligiblePool(qs, p).map((q) => q.id)).toEqual(['a', 'd']);
   });
 });
 

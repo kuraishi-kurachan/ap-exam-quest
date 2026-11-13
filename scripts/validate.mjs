@@ -2,7 +2,7 @@
 // 使い方: node scripts/validate.mjs
 import { readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { OUT_DIR, ANSWERS_DIR, KANA, syllabus, minorToMajor, readJson } from './lib.mjs';
+import { ROOT, OUT_DIR, ANSWERS_DIR, KANA, syllabus, minorToMajor, readJson } from './lib.mjs';
 
 // 中分類のシラバス上の並び順(午前の問題は問番号順にこの順で出題される)
 const MINOR_ORDER = syllabus.majors.flatMap((m) => m.minors);
@@ -39,6 +39,8 @@ for (const f of files) {
       if (!nonEmpty(q[k])) err(q, `${k} が空`);
     }
     if (!Number.isInteger(q.pdfPage) || q.pdfPage < 1) err(q, 'pdfPage が不正');
+    if (q.figure && !existsSync(join(ROOT, 'public', q.figure))) err(q, `図表の画像 public/${q.figure} がない`);
+    if (q.hasFigure && !q.figure) console.log(`注意: ${q.id} は図表問題だが画像がない(出題されない)`);
     if (!Array.isArray(q.choices) || q.choices.length !== 4 || !q.choices.every(nonEmpty)) err(q, '選択肢が4つそろっていない');
     if (!Array.isArray(q.whyWrong) || q.whyWrong.length !== 4 || !q.whyWrong.every(nonEmpty)) err(q, 'whyWrong が4つそろっていない');
     if (![0, 1, 2, 3].includes(q.answer)) err(q, `正解が不正(${q.answer})`);
