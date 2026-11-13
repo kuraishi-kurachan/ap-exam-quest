@@ -2,7 +2,7 @@
 // 使い方: node scripts/extract-answers.mjs 2025a 2025h
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
-import { SRC_DIR, KANA, writeJson } from './lib.mjs';
+import { SRC_DIR, ANSWERS_DIR, KANA, writeJson } from './lib.mjs';
 
 const FIELD = { 'Ｔ': 'T', 'Ｍ': 'M', 'Ｓ': 'S', T: 'T', M: 'M', S: 'S' };
 
@@ -29,6 +29,6 @@ for (const id of process.argv.slice(2)) {
 
   const count = Object.keys(answers).length;
   if (count !== 80) problems.push(`問題数が80ではありません(${count})`);
-  writeJson(join(SRC_DIR, 'answers', `${id}.json`), { id, label, answers, problems });
+  writeJson(join(ANSWERS_DIR, `${id}.json`), { id, label, answers, problems });
   console.log(`${id}: ${label} ${count}問 ${problems.length ? '要確認: ' + problems.join(' / ') : 'OK'}`);
 }

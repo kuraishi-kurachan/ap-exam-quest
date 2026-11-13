@@ -1,11 +1,13 @@
 // 会社の成長(評価額とステージ)
 import { MASTERED_BOX, REWARD, STAGES } from '../config';
 import type { Progress, Question, QuestionStat } from '../types';
+import { isEarly } from './srs';
 
 /** 1問回答したときの評価額の増分(万円) */
-export function rewardFor(prev: QuestionStat | undefined, correct: boolean): number {
+export function rewardFor(prev: QuestionStat | undefined, correct: boolean, today: string): number {
   if (!correct) return REWARD.wrong;
-  return prev ? REWARD.reviewCorrect : REWARD.firstCorrect;
+  if (!prev) return REWARD.firstCorrect;
+  return isEarly(prev, today) ? REWARD.earlyCorrect : REWARD.reviewCorrect;
 }
 
 /** 出題対象のうち「身についた」(段階3以上)問題の割合 */

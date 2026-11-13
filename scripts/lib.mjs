@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const SRC_DIR = join(ROOT, 'data-src'); // git管理しない作業フォルダ
 export const OUT_DIR = join(ROOT, 'src', 'data'); // 問題データは exams/ の下。アプリにビルド時に取り込まれる
+export const ANSWERS_DIR = join(ROOT, 'data', 'answers'); // 解答PDFから取った公式正解(git管理し、CIでも照合する)
 export const IPA = 'https://www.ipa.go.jp';
 
 export const syllabus = JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'syllabus.json'), 'utf8'));

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { REWARD } from '../config';
 import { newProgress, parseProgress, exportProgress } from '../storage/progress';
 import { answerCurrent, beginQuestions, closeSession, nextQuestion, sessionScore, startSession, toggleFlag } from './play';
-import { buildEventQuestions } from './select';
+import { masteryRatio } from './growth';
+import { buildEventQuestions, dueList } from './select';
 import { fakeQuestion, seededRng } from './testutil';
 
 const today = '2026-11-13';
@@ -47,6 +48,32 @@ describe('イベントの進行', () => {
     const nextDay = buildEventQuestions(all, p, '2026-11-14', '技術要素', seededRng(2));
     expect(sameDay).not.toContain(missed);
     expect(nextDay).toContain(missed);
+  });
+
+  it('同じ日に何十回解き直しても「習得済み」にはならない(間隔反復が崩れない)', () => {
+    const many = Array.from({ length: 76 }, (_, i) => fakeQuestion(`m${i}`));
+    const rng = seededRng(3);
+    let p = newProgress();
+    for (let ev = 0; ev < 80; ev++) {
+      p = beginQuestions(startSession(p, many, today, rng, 'event', '技術要素'));
+      while (p.session && p.session.phase !== 'result') p = nextQuestion(answerCurrent(p, many, 0, today), many);
+      p = closeSession(p);
+    }
+    expect(masteryRatio(many, p)).toBe(0); // 段階3以上はゼロのまま
+    expect(Object.values(p.questions).every((s) => s.box === 2 && s.due === '2026-11-16')).toBe(true);
+    // 3日後には全問が復習待ちになる
+    expect(dueList(many, p, '2026-11-16')).toHaveLength(76);
+  });
+
+  it('期限前の正解は報酬がごく少額', () => {
+    let p = beginQuestions(startSession(newProgress(), all, today, seededRng(), 'event', '技術要素'));
+    const id = p.session!.questionIds[0];
+    p = closeSession(answerCurrent(p, all, 0, today)); // 初見で正解
+    const before = p.company.valuation;
+    // 同じ問題だけのイベントを作って、同日にもう一度正解する
+    p = { ...p, session: { ...p.session!, kind: 'event', major: null, scenario: '', questionIds: [id], answers: [null], index: 0, phase: 'question', valuationBefore: before, newTerms: [] } } as typeof p;
+    p = answerCurrent(p, all, 0, today);
+    expect(p.company.valuation - before).toBe(REWARD.earlyCorrect);
   });
 
   it('監査は8問以上正解でクリアし、ボーナスが入る', () => {

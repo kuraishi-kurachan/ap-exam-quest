@@ -64,5 +64,12 @@ export function parseProgress(text: string): Progress {
     company: { ...base.company, ...p.company },
     history: Array.isArray(p.history) ? p.history : [],
     session: p.session ?? null,
+    ...(typeof p.lastExportAt === 'string' ? { lastExportAt: p.lastExportAt } : {}),
   };
+}
+
+/** バックアップを促すか(1問以上解いていて、最後の書き出しから7日以上) */
+export function needsBackup(p: Progress, today: string, daysBetween: (a: string, b: string) => number): boolean {
+  if (Object.keys(p.questions).length === 0) return false;
+  return !p.lastExportAt || daysBetween(p.lastExportAt, today) >= 7;
 }

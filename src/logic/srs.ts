@@ -3,8 +3,20 @@ import { INTERVALS } from '../config';
 import type { Box, QuestionStat } from '../types';
 import { addDays } from './date';
 
-/** 回答結果を反映した新しい学習状況を返す(元のオブジェクトは変えない) */
+/** 復習期限より前に解き直しているか(自主練) */
+export function isEarly(prev: QuestionStat | undefined, today: string): boolean {
+  return !!prev && prev.due > today;
+}
+
+/**
+ * 回答結果を反映した新しい学習状況を返す(元のオブジェクトは変えない)。
+ * 期限前の正解では段階も期限も変えない(覚えた直後の解き直しで「習得済み」にならないように)。
+ * 誤答はいつでも段階1に戻す。
+ */
 export function review(prev: QuestionStat | undefined, correct: boolean, today: string): QuestionStat {
+  if (prev && correct && isEarly(prev, today)) {
+    return { ...prev, seen: prev.seen + 1 };
+  }
   let box: Box;
   if (!correct) box = 1;
   else if (!prev) box = 2; // 初見で正解したら段階2から

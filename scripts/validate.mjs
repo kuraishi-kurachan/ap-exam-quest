@@ -2,7 +2,10 @@
 // 使い方: node scripts/validate.mjs
 import { readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { SRC_DIR, OUT_DIR, KANA, syllabus, minorToMajor, readJson } from './lib.mjs';
+import { OUT_DIR, ANSWERS_DIR, KANA, syllabus, minorToMajor, readJson } from './lib.mjs';
+
+// 中分類のシラバス上の並び順(午前の問題は問番号順にこの順で出題される)
+const MINOR_ORDER = syllabus.majors.flatMap((m) => m.minors);
 
 const errors = [];
 const err = (q, msg) => errors.push(`${q?.id ?? '?'}: ${msg}`);
@@ -15,8 +18,16 @@ let total = 0;
 
 for (const f of files) {
   const exam = readJson(join(examDir, f));
-  const key = readJson(join(SRC_DIR, 'answers', `${exam.id}.json`)); // 手元にあれば正解を突き合わせる
+  const key = readJson(join(ANSWERS_DIR, `${exam.id}.json`)); // 公式正解(必須)
+  if (!key) errors.push(`${exam.id}: 公式正解ファイル data/answers/${exam.id}.json がありません`);
   if (`${exam.id}.json` !== f) errors.push(`${f}: ファイル名と回IDが合いません`);
+  // 中分類が問番号順に逆行していないか(分類ミスの検出)
+  let maxIdx = -1;
+  for (const q of [...exam.questions].sort((a, b) => a.no - b.no)) {
+    const idx = MINOR_ORDER.indexOf(q.minor);
+    if (idx >= 0 && idx < maxIdx) err(q, `中分類「${q.minor}」が出題順(シラバス順)に逆行している。前の問題の分類を見直す`);
+    maxIdx = Math.max(maxIdx, idx);
+  }
   if (exam.questions.length !== 80) console.log(`注意: ${exam.id} は ${exam.questions.length}問(80問ではない)`);
 
   for (const q of exam.questions) {

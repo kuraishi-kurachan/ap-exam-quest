@@ -29,7 +29,7 @@ describe('間隔反復', () => {
   it('正解するたびに段階が上がり、間隔が 1→3→7→14→30日 と伸びる', () => {
     let s = review(undefined, false, today); // 段階1
     const dues: number[] = [];
-    let d = today;
+    let d = s.due; // 毎回、復習期限の当日に解く
     for (let i = 0; i < 5; i++) {
       s = review(s, true, d);
       dues.push(daysBetween(d, s.due));
@@ -37,6 +37,22 @@ describe('間隔反復', () => {
     }
     expect(dues).toEqual([3, 7, 14, 30, 30]); // 段階5で頭打ち
     expect(s.box).toBe(5);
+  });
+
+  it('復習期限前に正解しても段階・期限は変わらない(回数だけ増える)', () => {
+    const prev = { box: 2 as const, due: '2026-11-16', seen: 1, wrong: 0 };
+    expect(review(prev, true, today)).toEqual({ ...prev, seen: 2 });
+  });
+
+  it('復習期限前でも、間違えたら段階1に戻る', () => {
+    const prev = { box: 4 as const, due: '2026-11-30', seen: 4, wrong: 0 };
+    expect(review(prev, false, today)).toMatchObject({ box: 1, due: '2026-11-14', seen: 5, wrong: 1 });
+  });
+
+  it('「おかしい」報告は回答しても消えない', () => {
+    const prev = { box: 2 as const, due: today, seen: 1, wrong: 0, flagged: true };
+    expect(review(prev, true, today).flagged).toBe(true);
+    expect(review({ ...prev, due: '2026-12-01' }, true, today).flagged).toBe(true);
   });
 
   it('段階5でも間違えたら段階1に戻る', () => {

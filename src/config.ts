@@ -30,6 +30,7 @@ export const MASTERED_BOX = 3;
 export const REWARD = {
   firstCorrect: 50,
   reviewCorrect: 80,
+  earlyCorrect: 5, // 復習期限前の解き直し(自主練)での正解
   wrong: 5, // 間違えても学びはある
   auditClear: 500,
 };

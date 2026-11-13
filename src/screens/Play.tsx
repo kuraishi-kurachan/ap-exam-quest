@@ -59,7 +59,7 @@ export default function Play({ ctx }: { ctx: Ctx }) {
       <main className="mx-auto max-w-md px-4 pt-4 pb-48">
         {s.phase === 'intro' && <Intro ctx={ctx} />}
         {s.phase === 'question' && q && <QuestionView ctx={ctx} q={q} />}
-        {s.phase === 'explanation' && q && <Explanation ctx={ctx} q={q} />}
+        {s.phase === 'explanation' && q && <Explanation key={`${s.index}-${q.id}`} ctx={ctx} q={q} />}
         {s.phase === 'result' && <Result ctx={ctx} />}
       </main>
     </div>
@@ -122,6 +122,8 @@ function Explanation({ ctx, q }: { ctx: Ctx; q: Question }) {
   const flagged = !!ctx.progress.questions[q.id]?.flagged;
   const last = s.index + 1 >= s.questionIds.length;
   const [showStem, setShowStem] = useState(false);
+  // 選択肢ごとの説明の開閉。正解と自分の回答だけ最初から開く。画面の再描画で勝手に戻らないよう自前で覚えておく
+  const [opened, setOpened] = useState<boolean[]>(() => q.choices.map((_, i) => i === q.answer || i === chosen));
   const term = q.terms[0];
 
   const explainPrompt = `あなたは入社1年目の新人です。私が今から「${term?.name ?? q.minor}」を説明するので、分からない点を1つずつ質問してください。3往復したら、私の説明の正確さを100点満点で採点し、抜けていた点を教えてください。
@@ -143,7 +145,11 @@ function Explanation({ ctx, q }: { ctx: Ctx; q: Question }) {
           return (
             <details
               key={i}
-              open={isAns || isMine}
+              open={opened[i]}
+              onToggle={(e) => {
+                const isOpen = (e.currentTarget as HTMLDetailsElement).open;
+                setOpened((prev) => (prev[i] === isOpen ? prev : prev.map((v, j) => (j === i ? isOpen : v))));
+              }}
               className={`rounded-xl border p-3 ${
                 isAns
                   ? 'border-teal-500 bg-teal-50 dark:bg-teal-950'

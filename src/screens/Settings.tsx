@@ -46,9 +46,16 @@ export default function Settings({ ctx }: { ctx: Ctx }) {
         <Button
           className="mt-3 w-full"
           variant="secondary"
-          onClick={async () => ctx.toast((await copyText(exportProgress(progress))) ? '学習記録をコピーした' : 'コピーできませんでした')}
+          onClick={async () => {
+            if (await copyText(exportProgress(progress))) {
+              ctx.update((p) => ({ ...p, lastExportAt: ctx.today }));
+              ctx.toast('学習記録をコピーした');
+            } else {
+              ctx.toast('コピーできませんでした');
+            }
+          }}
         >
-          書き出す(コピー)
+          書き出す(コピー){progress.lastExportAt && `・前回 ${progress.lastExportAt}`}
         </Button>
         <textarea
           value={importText}

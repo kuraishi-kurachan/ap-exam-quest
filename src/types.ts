@@ -60,4 +60,5 @@ export type Progress = {
   company: { name: string; valuation: number; eventsCleared: number; auditsCleared: number };
   history: { date: string; answered: number; correct: number }[];
   session: Session | null;
+  lastExportAt?: string; // 最後にバックアップを書き出した日
 };

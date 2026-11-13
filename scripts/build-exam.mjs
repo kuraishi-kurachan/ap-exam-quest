@@ -3,12 +3,12 @@
 // 使い方: node scripts/build-exam.mjs 2025a
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { SRC_DIR, OUT_DIR, minorToMajor, readJson, writeJson } from './lib.mjs';
+import { SRC_DIR, OUT_DIR, ANSWERS_DIR, minorToMajor, readJson, writeJson } from './lib.mjs';
 
 const pad2 = (n) => String(n).padStart(2, '0');
 
 for (const id of process.argv.slice(2)) {
-  const answers = readJson(join(SRC_DIR, 'answers', `${id}.json`));
+  const answers = readJson(join(ANSWERS_DIR, `${id}.json`));
   const sources = readJson(join(SRC_DIR, 'sources.json'), {});
   if (!answers) throw new Error(`${id}: 先に extract-answers を実行してください`);
   if (!sources[id]) throw new Error(`${id}: 先に fetch-pdfs を実行してください`);

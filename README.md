@@ -30,7 +30,7 @@ npm run build      # 本番ビルド(dist/)
 
 ```bash
 npm run data:fetch -- 2024a      # IPAからPDFを取得(data-src/pdf/)
-npm run data:answers -- 2024a    # 解答PDFから正解を抽出
+npm run data:answers -- 2024a    # 解答PDFから正解を抽出(data/answers/。git管理し、CIでも照合)
 npm run data:pages -- 2024a      # 問題PDFをページ画像に(data-src/pages/)
 # → docs/TRANSCRIBE.md に従ってページ画像から書き写し(data-src/transcribed/2024a/part-*.json)
 npm run data:build -- 2024a      # 正解と結合して src/data/exams/2024a.json を作る

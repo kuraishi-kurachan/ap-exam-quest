@@ -3,8 +3,10 @@ import { Button, Card, ProgressBar } from '../components/ui';
 import { EXAM_DATES } from '../config';
 import { daysBetween } from '../logic/date';
 import { formatValuation, masteryRatio, stageFor } from '../logic/growth';
+import { copyText } from '../lib/clipboard';
 import { closeSession } from '../logic/play';
 import { auditStatus, dueList } from '../logic/select';
+import { exportProgress, needsBackup } from '../storage/progress';
 
 export default function Home({ ctx }: { ctx: Ctx }) {
   const { progress, pool, all, today, exams } = ctx;
@@ -18,6 +20,18 @@ export default function Home({ ctx }: { ctx: Ctx }) {
   const unseen = pool.filter((q) => !progress.questions[q.id]).length;
 
   const session = progress.session;
+  // 未出題も復習待ちもない = 今日やるべきことは終わり。続けるなら自主練(記録はほぼ進まない)
+  const allClear = pool.length > 0 && unseen === 0 && due === 0;
+  const backup = needsBackup(progress, today, daysBetween);
+
+  const doBackup = async () => {
+    if (await copyText(exportProgress(progress))) {
+      ctx.update((p) => ({ ...p, lastExportAt: today }));
+      ctx.toast('コピーした。メモアプリなどに貼って保存してね');
+    } else {
+      ctx.toast('コピーできませんでした。設定画面から試してください');
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -61,6 +75,28 @@ export default function Home({ ctx }: { ctx: Ctx }) {
         </Card>
       )}
 
+      {allClear && !session && (
+        <Card className="border-2 border-teal-400 dark:border-teal-600">
+          <p className="font-bold">☕ 今日の案件は片付いた</p>
+          <p className="mt-1 text-sm">
+            未出題も復習待ちもない。次の復習は日を空けたほうが記憶に残る。続けるなら自主練になる(正解しても習得度はほぼ進まない)。
+          </p>
+        </Card>
+      )}
+
+      {backup && (
+        <Card className="text-sm">
+          <p className="font-bold">💾 バックアップしよう</p>
+          <p className="mt-1 text-slate-600 dark:text-slate-300">
+            {progress.lastExportAt ? `最後の書き出しから${daysBetween(progress.lastExportAt, today)}日たった。` : 'まだ一度も書き出していない。'}
+            記録はこの端末の中にしかない。
+          </p>
+          <Button variant="secondary" className="mt-2 w-full" onClick={doBackup}>
+            記録をコピーする
+          </Button>
+        </Card>
+      )}
+
       <Card className="text-sm text-slate-600 dark:text-slate-300">
         <p>
           収録: {exams.map((e) => e.label).join('・') || 'なし'}({all.length}問)
@@ -95,8 +131,12 @@ export default function Home({ ctx }: { ctx: Ctx }) {
                 </Button>
               )}
               {audit !== 'forced' && (
-                <Button onClick={() => ctx.start('event')} disabled={pool.length === 0} variant={audit === 'none' ? 'primary' : 'secondary'}>
-                  次のイベントへ(5問)
+                <Button
+                  onClick={() => ctx.start('event')}
+                  disabled={pool.length === 0}
+                  variant={audit === 'none' && !allClear ? 'primary' : 'secondary'}
+                >
+                  {allClear ? '自主練する(5問)' : '次のイベントへ(5問)'}
                 </Button>
               )}
             </>

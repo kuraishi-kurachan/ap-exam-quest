@@ -82,7 +82,7 @@ export function answerCurrent(progress: Progress, all: Question[], choice: numbe
     ...progress,
     questions,
     history,
-    company: { ...progress.company, valuation: progress.company.valuation + rewardFor(prev, correct) },
+    company: { ...progress.company, valuation: progress.company.valuation + rewardFor(prev, correct, today) },
     session: { ...s, answers, phase: 'explanation', newTerms: [...s.newTerms, ...newTerms] },
   };
 }
